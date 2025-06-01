@@ -1,0 +1,19 @@
+# dependencies
+/node_modules
+
+# testing
+/coverage
+
+# production
+/dist
+
+# misc
+DS_Store
+.package-lock.json
+
+# environment
+.env
+.vercel
+
+# db
+*.db
