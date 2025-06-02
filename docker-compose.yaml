@@ -8,29 +8,12 @@ services:
       - sqlite_data:/app/data
     environment:
       NODE_ENV: production
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.tedx-fe.rule=Host(`prambanan-be.ahargunyllib.tech`)"
-      - "traefik.http.routers.tedx-fe.entrypoints=web"
     networks:
-      - traefik
+      - caddy
     restart: always
 
-  reverse-proxy:
-    image: traefik:v3.1
-    command:
-      - "--providers.docker"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
-    ports:
-      - "80:80"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    networks:
-      - traefik
-
 networks:
-  traefik:
+  caddy:
     driver: bridge
 
 volumes:
