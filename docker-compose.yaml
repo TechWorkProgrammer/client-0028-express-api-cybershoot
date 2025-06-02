@@ -8,6 +8,8 @@ services:
       - sqlite_data:/app/data
     environment:
       NODE_ENV: production
+    ports:
+      - "7000:7000"
     networks:
       - caddy
     restart: always
