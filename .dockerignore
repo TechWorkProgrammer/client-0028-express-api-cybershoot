@@ -1,4 +1,5 @@
 node_modules
+dist
 Dockerfile*
 .dockerignore
 .git
@@ -11,3 +12,5 @@ helm-charts
 .editorconfig
 .idea
 coverage*
+*.log
+.DS_Store

@@ -21,10 +21,13 @@ FROM base AS prerelease
 COPY --from=install /temp/dev/node_modules node_modules
 COPY . .
 
+# Build TypeScript to JavaScript
+RUN bun run build
+
 # copy production dependencies and source code into final image
 FROM base AS release
 COPY --from=install /temp/prod/node_modules node_modules
-COPY --from=prerelease /app/src ./src
+COPY --from=prerelease /app/dist ./dist
 COPY --from=prerelease /app/package.json .
 COPY --from=prerelease /app/data ./data
 COPY --from=prerelease /app/.env .
@@ -36,4 +39,4 @@ RUN chown -R bun:bun /app
 # run the app
 USER bun
 EXPOSE 8080/tcp
-ENTRYPOINT [ "bun", "src/index.ts" ]
+ENTRYPOINT [ "bun", "dist/index.js" ]
