@@ -4,6 +4,7 @@ export const Env = {
   APP_URL: process.env.APP_URL!,
 
   TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN!,
+  TELEGRAM_GAME_SHORT_NAME: process.env.TELEGRAM_GAME_SHORT_NAME!,
 
   DATABASE_URL: process.env.DATABASE_URL!,
 
