@@ -61,7 +61,8 @@ telegramBot.onText(/\/help/, async (msg) => {
         "• /start - Start bot\n" +
         "• /help - Help & commands\n" +
         "• /game - Play game\n" +
-        "• /register - Create account\n\n" +
+        "• /register - Create account\n" +
+        "• /relogin - Refresh session (if token expired)\n\n" +
         "*💰 Score Menu*\n" +
         "• /score - Check $CYBERS score\n" +
         "• /score\\_history - Score history\n" +
@@ -80,6 +81,7 @@ telegramBot.onText(/\/help/, async (msg) => {
         "• /feedback - Send feedback\n\n" +
         "*💡 Tips:*\n" +
         "• Use /register before playing\n" +
+        "• Use /relogin if you see 'Please login again'\n" +
         "• Use /score @username to check other player's score\n" +
         "• Join esports competition for $100K prize pool!",
         {parse_mode: "Markdown"}
@@ -628,6 +630,52 @@ telegramBot.onText(/\/feedback/, async (msg) => {
         {parse_mode: "Markdown"}
     );
 });
+
+telegramBot.onText(/\/relogin/, async (msg) => {
+    const chatId = msg.chat.id;
+    logger.info(`/relogin msg: ${JSON.stringify(msg)}`);
+
+    const user = await getUser(chatId);
+
+    if (!user) {
+        await telegramBot.sendMessage(
+            chatId,
+            "❌ You need to /register first before playing!"
+        );
+        return;
+    }
+
+    const tokens = await login(user.id);
+
+    if (!tokens) {
+        await telegramBot.sendMessage(
+            chatId,
+            "❌ Login failed. Please try again or contact support."
+        );
+        return;
+    }
+
+    await telegramBot.sendMessage(
+        chatId,
+        "✅ *Token Refreshed Successfully!*\n\n" +
+        "Your new session is now active.\n\n" +
+        "Click the button below to continue playing!\n\n" +
+        "🔗 _Token expires in 24 hours_",
+        {
+            parse_mode: "Markdown",
+            reply_markup: {
+                inline_keyboard: [[
+                    {
+                        text: "🎮 Play CyberShoot",
+                        url: `${Env.APP_URL}?access_token=${tokens.accessToken}&refresh_token=${tokens.refreshToken}`
+                    }
+                ]]
+            }
+        }
+    );
+});
+
+// ========== OTHER COMMANDS ==========
 
 // ========== CALLBACK QUERY & INLINE ==========
 
