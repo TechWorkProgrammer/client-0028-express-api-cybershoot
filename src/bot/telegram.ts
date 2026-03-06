@@ -273,8 +273,7 @@ telegramBot.onText(/\/score(@\w+)?/, async (msg, match) => {
         "• Games Played: Coming soon\n" +
         "• Win Rate: Coming soon\n" +
         "• Best Streak: Coming soon\n\n" +
-        "Keep playing to earn more $CYBERS! 🚀\n\n" +
-        "_Use /score\\_history to see detailed history_",
+        "Keep playing to earn more $CYBERS! 🚀",
         {parse_mode: "Markdown"}
     );
 });
