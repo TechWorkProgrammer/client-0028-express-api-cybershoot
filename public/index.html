@@ -6,6 +6,58 @@
     <title>Unity Web Player | prambanan</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
+    
+    <!-- API Redirect Fix -->
+    <script>
+      console.log('[CyberShoot] API redirect initialized');
+      
+      // Intercept all fetch() calls
+      const originalFetch = window.fetch;
+      window.fetch = function(url, options) {
+        if (typeof url === 'string') {
+          const originalUrl = url;
+          
+          // Redirect api.cybershoot.io to play.cybershoot.app
+          if (url.includes('api.cybershoot.io')) {
+            url = url.replace('api.cybershoot.io', 'play.cybershoot.app');
+            console.log('[CyberShoot] Redirected fetch:', originalUrl, '→', url);
+          }
+          
+          // Redirect cybershoot.io/api to play.cybershoot.app/api
+          if (url.includes('://cybershoot.io/api')) {
+            url = url.replace('://cybershoot.io/', '://play.cybershoot.app/');
+            console.log('[CyberShoot] Redirected fetch:', originalUrl, '→', url);
+          }
+        }
+        return originalFetch.call(this, url, options);
+      };
+      
+      // Intercept all XMLHttpRequest calls
+      const originalOpen = XMLHttpRequest.prototype.open;
+      XMLHttpRequest.prototype.open = function(method, url) {
+        if (typeof url === 'string') {
+          const originalUrl = url;
+          
+          // Redirect api.cybershoot.io to play.cybershoot.app
+          if (url.includes('api.cybershoot.io')) {
+            url = url.replace('api.cybershoot.io', 'play.cybershoot.app');
+            console.log('[CyberShoot] Redirected XHR:', originalUrl, '→', url);
+          }
+          
+          // Redirect cybershoot.io/api to play.cybershoot.app/api
+          if (url.includes('://cybershoot.io/api')) {
+            url = url.replace('://cybershoot.io/', '://play.cybershoot.app/');
+            console.log('[CyberShoot] Redirected XHR:', originalUrl, '→', url);
+          }
+        }
+        
+        // Call original with modified URL
+        arguments[1] = url;
+        return originalOpen.apply(this, arguments);
+      };
+      
+      console.log('[CyberShoot] API redirect ready!');
+    </script>
   </head>
   <body>
     <div id="unity-container" class="unity-desktop">
