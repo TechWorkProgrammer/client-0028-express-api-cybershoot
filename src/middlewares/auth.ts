@@ -5,7 +5,14 @@ import { JsonWebTokenError } from "jsonwebtoken";
 
 export async function requireAuth(req: Request, res: Response, next: NextFunction) {
   try {
-    const token = req.get("Authorization")?.split(" ")[1];
+    // Try to get token from Authorization header first, then from query params
+    let token = req.get("Authorization")?.split(" ")[1];
+    
+    // If no token in header, check query params
+    if (!token && req.query.access_token) {
+      token = req.query.access_token as string;
+    }
+    
     if (!token) {
       throw new HttpError(401, "Token missing");
     }
