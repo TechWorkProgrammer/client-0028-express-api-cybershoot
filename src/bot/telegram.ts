@@ -1,8 +1,9 @@
 import TelegramBot from "node-telegram-bot-api";
-import {Env} from "../config/env";
-import {logger} from "../config/logger";
-import {login, register} from "../services/auth.service";
-import {getUser} from "../services/user.service";
+import { Env } from "../config/env";
+import { logger } from "../config/logger";
+import { findUserById } from "../repositories/user.repositories";
+import { login, register } from "../services/auth.service";
+import { getUser } from "../services/user.service";
 
 const GAME_NAME = Env.TELEGRAM_GAME_SHORT_NAME;
 
